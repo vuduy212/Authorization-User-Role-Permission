@@ -28,12 +28,16 @@
                                 <td>{{ implode(', ', $user->roles()->get()->pluck('name')->toArray()) }}</td>
                                 <td>
                                     <a href="{{ route('users.show', $user->id) }}"><button type="button" class="btn btn-success">Detail</button></a>
+                                    @can('edit-users')
                                     <a href="{{ route('users.edit', $user->id) }}"><button type="button" class="btn btn-warning">Edit</button>
+                                    @endcan
+                                    @can('delete-users')
                                     <form action="{{ route('users.destroy', $user) }}" method="POST" class="float-left">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
+                                    @endcan
                                 </td>
                               </tr>
                             @endforeach

@@ -23,4 +23,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('/admin/users', UserController::class);
+Route::middleware('can:manage-users')->group(function () {
+    Route::resource('/admin/users', UserController::class);
+});
+
