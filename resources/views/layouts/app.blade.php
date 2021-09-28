@@ -27,7 +27,7 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                @can('manager-users')
+                @can('manage-users')
                 <a class="navbar-brand" href="{{ route('users.index') }}">
                     User Management
                 </a>
