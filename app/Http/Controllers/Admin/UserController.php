@@ -7,16 +7,17 @@ use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Repositories\UserRepository;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
-    protected $user;
-    public function __construct(User $user)
+    protected $userService;
+    public function __construct(UserService $userService)
     {
-        $this->middleware('auth');
-        $this->user = $user;
+        $this->userService = $userService;
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +26,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = $this->user->search($request->all());
+        $users = $this->userService->search($request->all());
         return view('admin.users.index', compact('users'));
     }
 
@@ -50,7 +51,7 @@ class UserController extends Controller
 
     public function store(CreateUserRequest $request)
     {
-        $this->user->saveUser($request);
+        $this->userRepository->create($request);
         return redirect(route('users.index'));
     }
 
