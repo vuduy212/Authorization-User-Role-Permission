@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Permission;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $permissions = Permission::all();
+        return view('home', compact('permissions'));
+    }
+
+    public function denies()
+    {
+        return view('denies');
     }
 }
