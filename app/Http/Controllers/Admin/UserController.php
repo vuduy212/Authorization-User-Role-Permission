@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,19 +12,20 @@ use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
-
-    public function __construct()
+    protected $user;
+    public function __construct(User $user)
     {
         $this->middleware('auth');
+        $this->user = $user;
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $users = $this->user->search($request->all());
         return view('admin.users.index', compact('users'));
     }
 
@@ -33,7 +36,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::all();
+
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -42,9 +47,11 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    public function store(CreateUserRequest $request)
     {
-        //
+        $this->user->saveUser($request);
+        return redirect(route('users.index'));
     }
 
     /**
@@ -71,10 +78,6 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        if(Gate::denies('edit-users'))
-        {
-            return redirect(route('users.index'));
-        }
         $roles = Role::all();
 
         return view("admin.users.edit")->with([
@@ -90,7 +93,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $user->roles()->sync($request->roles);
 
@@ -109,10 +112,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if(Gate::denies('delete-users'))
-        {
-            return redirect(route('users.index'));
-        }
         $user->roles()->detach();
         $user->delete();
 

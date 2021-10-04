@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('User Management based on Roles and Permissions') }}</div>
+                <div class="card-header">{{ __('Thong bao!!') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    {{ __('Welcome to Index !!') }}
+                    {{ __('Ban khong co quyen truy cap!!') }}
                 </div>
             </div>
         </div>

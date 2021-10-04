@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+
 
     /**
      * The attributes that are mass assignable.
@@ -44,24 +48,89 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany('App\Models\Role');
+        return $this->belongsToMany(Role::class);
     }
 
-    public function hasAnyRoles($roles)
+    public function hasPermission($perrmissions)
     {
-        if($this->roles()->whereIn('name', $roles)->first())
+        foreach($this->roles as $role)
         {
-            return true;
+            if($role->hasPermission($perrmissions)){
+                return true;
+            }
         }
         return false;
     }
 
-    public function hasRole($role)
-    {
-        if($this->roles()->where('name', $role)->first())
+    public function hasRole($roles){
+        foreach($roles as $role)
         {
-            return true;
+            if($this->roles->contains('name', $role))
+            {
+                return true;
+            }
         }
         return false;
+    }
+
+    public function attachRoles(int $roleId)
+    {
+        return $this->roles()->attach($roleId);
+    }
+
+    public function detachRoles()
+    {
+        return $this->roles()->detach();
+    }
+
+    public function syncRoles($role)
+    {
+        return $this->roles()->sync($role);
+    }
+
+    public function search(array $data)
+    {
+        $userName = array_key_exists('key', $data) ? $data['key'] : null;
+
+        return $this->searchUsername($userName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
+    }
+
+    public function scopeSearchUsername($query, $userName)
+    {
+        return $query->where('name','like','%'.$userName.'%');
+    }
+
+    public function getRolesID($roles) //return 1 array cac roles
+    {
+        $getRoles = [];
+        foreach($roles as $role)
+        {
+            $getRoles[] = $role;
+        }
+        return $getRoles;
+    }
+
+    public function saveUser(Request $data)
+    {
+        $user = $this->create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        if(empty($data['roles']))
+        {
+            $roles = [
+                'client' => '70'
+            ];
+        }
+        else
+        {
+            $roles = $this->getRolesID($data['roles']);
+        }
+
+        $user->roles()->attach($roles);
+
+        return $user;
     }
 }

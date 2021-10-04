@@ -6,12 +6,12 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    Users
-                    @can('user.create')
-                    <a href="{{ route('users.create') }}" class="btn btn-primary">Create New User</a>
+                    Permissions
+                    @can('permission.create')
+                    <a href="{{ route('permissions.create') }}" class="btn btn-primary">Create New Permission</a>
                     @endcan
                 </div>
-                <form action="{{ route('users.index') }}" method="GET" class="md-3 d-flex">
+                <form action="{{ route('permissions.index') }}" method="GET" class="md-3 d-flex">
                     <input type="text" class="form-control" name="key" value="{{request('key')}}">
                     <button class="btn btn-primary" type="submit">Search</button>
                 </form>
@@ -22,27 +22,25 @@
                           <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Roles</th>
-                            <th scope="col">Actions</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Options</th>
                           </tr>
                         </thead>
                         <tbody>
-                            @foreach ($users as $user)
+                            @foreach ($permissions as $permission)
                             <tr>
-                                <th scope="row">{{$user->id}}</th>
-                                <td>{{$user->name}}</td>
-                                <td>{{$user->email}}</td>
-                                <td>{{ implode(', ', $user->roles()->get()->pluck('name')->toArray()) }}</td>
+                                <th scope="row">{{$permission->id}}</th>
+                                <td>{{$permission->name}}</td>
+                                <td>{{$permission->action}}</td>
                                 <td>
-                                    @can('user.view')
-                                    <a href="{{ route('users.show', $user->id) }}"><button type="button" class="btn btn-success">DETAIL</button></a>
+                                    @can('permission.view')
+                                    <a href="{{ route('permissions.show', $permission->id) }}"><button type="button" class="btn btn-success">DETAIL</button></a>
                                     @endcan
-                                    @can('user.update')
-                                    <a href="{{ route('users.edit', $user->id) }}"><button type="button" class="btn btn-warning">EDIT</button>
+                                    @can('permission.update')
+                                    <a href="{{ route('permissions.edit', $permission->id) }}"><button type="button" class="btn btn-warning">EDIT</button>
                                     @endcan
-                                    @can('user.delete')
-                                    <form action="{{ route('users.destroy', $user) }}" method="POST" class="float-left">
+                                    @can('permission.delete')
+                                    <form action="{{ route('permissions.destroy', $permission) }}" method="POST" class="float-left">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">DELETE</button>
@@ -53,7 +51,7 @@
                             @endforeach
                         </tbody>
                       </table>
-                      {{$users->appends(request()->only('key','number'))->links()}}
+                      {{$permissions->appends(request()->only('key','number'))->links()}}
                 </div>
             </div>
         </div>

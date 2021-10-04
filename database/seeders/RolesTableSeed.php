@@ -14,10 +14,14 @@ class RolesTableSeed extends Seeder
      */
     public function run()
     {
-        Role::truncate();
+        $adminRole = Role::updateOrCreate(
+            ['name' => 'admin'],
+        );
 
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'author']);
-        Role::create(['name' => 'user']);
+        $clientRole = Role::updateOrCreate(
+            ['name' => 'client'],
+        );
+
+        $adminRole->attachPermissions([1,2,3,4,5,6,7,8,9,10,11,18]);
     }
 }
