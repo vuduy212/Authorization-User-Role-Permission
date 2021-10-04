@@ -88,13 +88,6 @@ class User extends Authenticatable
         return $this->roles()->sync($role);
     }
 
-    public function search(array $data)
-    {
-        $userName = array_key_exists('key', $data) ? $data['key'] : null;
-
-        return $this->searchUsername($userName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
-    }
-
     public function scopeSearchUsername($query, $userName)
     {
         return $query->where('name','like','%'.$userName.'%');
@@ -110,27 +103,5 @@ class User extends Authenticatable
         return $getRoles;
     }
 
-    public function saveUser(Request $data)
-    {
-        $user = $this->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
 
-        if(empty($data['roles']))
-        {
-            $roles = [
-                'client' => '70'
-            ];
-        }
-        else
-        {
-            $roles = $this->getRolesID($data['roles']);
-        }
-
-        $user->roles()->attach($roles);
-
-        return $user;
-    }
 }
