@@ -8,16 +8,18 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Services\RoleService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
-    protected $userService;
-    public function __construct(UserService $userService)
+    protected $userService, $roleService;
+    public function __construct(UserService $userService, RoleService $roleService)
     {
         $this->userService = $userService;
+        $this->roleService = $roleService;
     }
     /**
      * Display a listing of the resource.
@@ -26,7 +28,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = $this->userService->search($request->all());
+        $users = $this->userService->search($request);
         return view('admin.users.index', compact('users'));
     }
 
@@ -38,7 +40,6 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-
         return view('admin.users.create', compact('roles'));
     }
 
@@ -51,7 +52,7 @@ class UserController extends Controller
 
     public function store(CreateUserRequest $request)
     {
-        $this->userRepository->create($request);
+        $this->userService->createUser($request);
         return redirect(route('users.index'));
     }
 
@@ -96,12 +97,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        $user->roles()->sync($request->roles);
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
-
+        $this->userService->updateUser($request, $user);
         return redirect()->route('users.index');
     }
 
@@ -113,9 +109,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->roles()->detach();
-        $user->delete();
-
+        $this->userService->deleteUser($user);
         return redirect()->route('users.index');
     }
 }

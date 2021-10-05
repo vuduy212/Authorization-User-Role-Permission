@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Permission;
+use App\Services\PermissionsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class PermissionController extends Controller
 {
-    public function __construct(Permission $permissions)
+    protected $permissionService;
+
+    public function __construct(PermissionsService $permissionService)
     {
-        $this->permissions = $permissions;
-        $this->middleware('auth');
+        $this->permissionService = $permissionService;
     }
     /**
      * Display a listing of the resource.
@@ -20,7 +22,7 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        $permissions = $this->permissions->search($request->all());
+        $permissions = $this->permissionService->search($request);
         return view('admin.permissions.index', compact('permissions'));
     }
 
@@ -32,10 +34,6 @@ class PermissionController extends Controller
      */
     public function show(Permission $permission)
     {
-        // if(Gate::denies('permission.view'))
-        // {
-        //     return redirect(route('permissions.index'));
-        // }
         return view('admin.permissions.show')->with([
             'permission' => $permission
         ]);
@@ -48,10 +46,6 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        // if(Gate::denies('permission.create'))
-        // {
-        //     return redirect(route('permissions.index'));
-        // }
         return view('admin.permissions.create');
     }
 
@@ -75,10 +69,6 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        // if(Gate::denies('permission.update'))
-        // {
-        //     return redirect(route('permissions.index'));
-        // }
         return view("admin.permissions.edit")->with([
             'permission' => $permission
         ]);
@@ -108,12 +98,7 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
-        // if(Gate::denies('permission.delete'))
-        // {
-        //     return redirect(route('permissions.index'));
-        // }
         $permission->delete();
-
         return redirect()->route('permissions.index');
     }
 }

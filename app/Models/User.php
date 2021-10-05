@@ -51,22 +51,22 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
-    public function hasPermission($perrmissions)
-    {
-        foreach($this->roles as $role)
+    public function hasRole($roles){
+        foreach($roles as $role)
         {
-            if($role->hasPermission($perrmissions)){
+            if($this->roles->contains('name', $role))
+            {
                 return true;
             }
         }
         return false;
     }
 
-    public function hasRole($roles){
-        foreach($roles as $role)
+    public function hasPermission($perrmissions)
+    {
+        foreach($this->roles as $role)
         {
-            if($this->roles->contains('name', $role))
-            {
+            if($role->hasPermission($perrmissions)){
                 return true;
             }
         }
@@ -83,25 +83,20 @@ class User extends Authenticatable
         return $this->roles()->detach();
     }
 
-    public function syncRoles($role)
+    public function syncRoles(int $roleId)
     {
-        return $this->roles()->sync($role);
+        return $this->roles()->sync($roleId);
+    }
+
+    public function search(array $data)
+    {
+        $userName = array_key_exists('key', $data) ? $data['key'] : null;
+
+        return $this->searchUsername($userName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
     }
 
     public function scopeSearchUsername($query, $userName)
     {
-        return $query->where('name','like','%'.$userName.'%');
+        return $query->where('name', 'like', '%' . $userName . '%');
     }
-
-    public function getRolesID($roles) //return 1 array cac roles
-    {
-        $getRoles = [];
-        foreach($roles as $role)
-        {
-            $getRoles[] = $role;
-        }
-        return $getRoles;
-    }
-
-
 }

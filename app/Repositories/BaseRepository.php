@@ -24,4 +24,9 @@ abstract class BaseRepository
     {
         return $this->model->create($data);
     }
+
+    public function getSingleRecord($id)
+    {
+        return $this->model->findOrFail($id);
+    }
 }
