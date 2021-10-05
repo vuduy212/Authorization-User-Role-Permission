@@ -7,11 +7,9 @@ use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use App\Services\RoleService;
 use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -65,7 +63,6 @@ class UserController extends Controller
     public function show(User $user)
     {
         $roles = Role::all();
-
         return view('admin.users.show')->with([
             'user' => $user,
             'roles' => $roles
@@ -81,7 +78,6 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::all();
-
         return view("admin.users.edit")->with([
             'user' => $user,
             'roles' => $roles

@@ -36,5 +36,4 @@ class UserService
     {
         return $this->userRepository->deleteUser($user);
     }
-
 }

@@ -18,8 +18,7 @@ class PermissionAuthorization
      */
     public function handle(Request $request, Closure $next, ...$permissions)
     {
-        if($request->user()->hasPermission($permissions))
-        {
+        if ($request->user()->hasPermission($permissions)) {
             return $next($request);
         }
         return redirect(route('denies'));

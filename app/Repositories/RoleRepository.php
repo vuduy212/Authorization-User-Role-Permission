@@ -13,6 +13,15 @@ class RoleRepository extends BaseRepository
         return Role::class;
     }
 
+    public function getPermissionsID($permissions) //return 1 array cac permission
+    {
+        $getPermissions = [];
+        foreach ($permissions as $permission) {
+            $getPermissions[] = $permission;
+        }
+        return $getPermissions;
+    }
+
     public function search(array $data)
     {
         $roleName = array_key_exists('key', $data) ? $data['key'] : null;
@@ -22,7 +31,7 @@ class RoleRepository extends BaseRepository
 
     public function scopeSearchRoleName($query, $roleName)
     {
-        return $query->where('name','like','%'.$roleName.'%');
+        return $query->where('name', 'like', '%' . $roleName . '%');
     }
 
     public function createRole(array $data)
@@ -31,14 +40,11 @@ class RoleRepository extends BaseRepository
             'name' => $data['name'],
         ]);
 
-        if(empty($data['permissions']))
-        {
+        if (empty($data['permissions'])) {
             $permissions = [
                 'List user' => '5'
             ];
-        }
-        else
-        {
+        } else {
             $permissions = $this->getPermissionsID($data['permissions']);
         }
         $role->attachPermissions($permissions);
@@ -60,15 +66,5 @@ class RoleRepository extends BaseRepository
     {
         $role->permissions()->detach();
         $role->delete();
-    }
-
-    public function getPermissionsID($permissions) //return 1 array cac permission
-    {
-        $getPermissions = [];
-        foreach($permissions as $permission)
-        {
-            $getPermissions[] = $permission;
-        }
-        return $getPermissions;
     }
 }

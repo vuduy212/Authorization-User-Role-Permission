@@ -25,6 +25,6 @@ class PermissionsRepository extends BaseRepository
 
     public function scopeSearchRoleName($query, $permissionName)
     {
-        return $query->where('name','like','%'.$permissionName.'%');
+        return $query->where('name', 'like', '%' . $permissionName . '%');
     }
 }

@@ -15,7 +15,7 @@ class UserRepository extends BaseRepository
         return User::class;
     }
 
-    public function getRolesID($roles) //return 1 array cac roles
+    public function getRolesID($roles)
     {
         $getRoles = [];
         foreach ($roles as $role) {
@@ -32,14 +32,11 @@ class UserRepository extends BaseRepository
             'password' => Hash::make($data['password']),
         ]);
 
-        if(empty($data['roles']))
-        {
+        if (empty($data['roles'])) {
             $roles = [
                 'client' => '70'
             ];
-        }
-        else
-        {
+        } else {
             $roles = $this->getRolesID($data['roles']);
         }
 
@@ -47,27 +44,6 @@ class UserRepository extends BaseRepository
 
         return $user;
     }
-
-    // public function updateUser(array $data)
-    // {
-    //     $user = $this->model;
-    //     $user->name = $data['name'];
-    //     $user->email = $data['email'];
-    //     if(empty($data['roles']))
-    //     {
-    //         $roles = [
-    //             'client' => '70'
-    //         ];
-    //     }
-    //     else
-    //     {
-    //         $roles = $this->getRolesID($data['roles']);
-    //     }
-    //     $user->roles()->sync($roles);
-    //     $user->save();
-
-    //     return $user;
-    // }
 
     public function updateUser(Request $request, User $user)
     {

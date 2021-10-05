@@ -76,5 +76,4 @@ class UpdateRoleTest extends TestCase
         $response = $this->put($this->getRoleUpdateRoute($role), $role->toArray());
         $this->assertDatabaseHas('roles', ['id' => $role->id, 'name' => $name]);
     }
-
 }
