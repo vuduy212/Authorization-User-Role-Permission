@@ -62,37 +62,4 @@ class Role extends Model
     {
         return $this->permissions()->detach();
     }
-
-    public function getPermissionsID($permissions) //return 1 array cac permission
-    {
-        $getPermissions = [];
-        foreach($permissions as $permission)
-        {
-            $getPermissions[] = $permission;
-        }
-        return $getPermissions;
-    }
-
-    public function saveRole(Request $data)
-    {
-        $role = $this->create([
-            'name' => $data['name'],
-        ]);
-
-        //$permissions = $this->getPermissionsID($data['permissions']);
-        if(empty($data['permissions']))
-        {
-            $permissions = [
-                'List user' => '5'
-            ];
-        }
-        else
-        {
-            $permissions = $this->getPermissionsID($data['permissions']);
-        }
-        $role->attachPermissions($permissions);
-
-        return $role;
-    }
-
 }

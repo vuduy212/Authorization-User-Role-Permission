@@ -38,14 +38,16 @@ abstract class TestCase extends BaseTestCase
     }
 
     /** get role */
-    public function getAdminRole(){
-        $role = Role::where('name','admin')->first();
+    public function getAdminRole()
+    {
+        $role = Role::where('name', 'admin')->first();
         return $role->id;
     }
 
-    public function getRandomRole(){
+    public function getRandomRole()
+    {
         $roles = Role::all();
-        foreach ($roles as $role ){
+        foreach ($roles as $role) {
             $data[] = $role->id;
         }
         $position = array_rand($data);
@@ -158,13 +160,15 @@ abstract class TestCase extends BaseTestCase
     }
 
     /** get validate */
-    public function getPassword(){
+    public function getPassword()
+    {
         return '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
     }
 
-    public function getExistedEmail(){
+    public function getExistedEmail()
+    {
         $arr = User::all();
-        foreach ($arr as $user){
+        foreach ($arr as $user) {
             $data[] = $user->email;
         }
         $position = array_rand($data);

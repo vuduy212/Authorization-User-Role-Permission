@@ -5,17 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateRoleRequest;
 use App\Models\Permission;
 use App\Models\Role;
+use App\Services\PermissionsService;
+use App\Services\RoleService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
-    protected $role;
+    protected $roleService, $permissionService;
 
-    public function __construct(Role $role)
+    public function __construct(RoleService $roleService, PermissionsService $permissionService)
     {
-        $this->role = $role;
-        $this->middleware('auth');
+        $this->roleService = $roleService;
+        $this->permissionService = $permissionService;
     }
     /**
      * Display a listing of the resource.
@@ -24,7 +26,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = $this->role->search($request->all());
+        $roles = $this->roleService->search($request);
         return view('admin.roles.index', compact('roles'));
     }
 
@@ -35,12 +37,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        if(Gate::denies('role.create'))
-        {
-            return redirect(route('roles.index'));
-        }
         $permissions = Permission::all();
-
         return view('admin.roles.create', compact('permissions'));
     }
 
@@ -52,7 +49,7 @@ class RoleController extends Controller
      */
     public function store(CreateRoleRequest $request)
     {
-        $this->role->saveRole($request);
+        $this->roleService->createRole($request);
         return redirect(route('roles.index'));
     }
 
@@ -64,10 +61,6 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        if(Gate::denies('role.view'))
-        {
-            return redirect(route('roles.view'));
-        }
         $permissions = Permission::all();
 
         return view('admin.roles.show')->with([
@@ -84,10 +77,6 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        if(Gate::denies('role.update'))
-        {
-            return redirect(route('roles.index'));
-        }
         $permissions = Permission::all();
 
         return view("admin.roles.edit")->with([
@@ -105,11 +94,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        $role->syncPermissions($request->permissions);
-
-        $role->name = $request->name;
-        $role->save();
-
+        $this->roleService->updateRole($request, $role);
         return redirect()->route('roles.index');
     }
 
@@ -121,13 +106,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        if(Gate::denies('role.update'))
-        {
-            return redirect(route('roles.index'));
-        }
-        $role->permissions()->detach();
-        $role->delete();
-
+        $this->roleService->deleteRole($role);
         return redirect()->route('roles.index');
     }
 }

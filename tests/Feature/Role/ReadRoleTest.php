@@ -35,7 +35,6 @@ class ReadRoleTest extends TestCase
     {
         $this->loginWithAdminRole();
         $role = Role::factory()->create();
-        //$role->roles()->attach($this->getRandomRole());
         $response = $this->get($this->getRoleDetailRoute($role));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertSee($role->name);
@@ -46,7 +45,6 @@ class ReadRoleTest extends TestCase
     {
         $this->loginWithClientRole();
         $role = Role::factory()->create();
-        //$role->roles()->attach($this->getRandomRole());
         $response = $this->get($this->getRoleDetailRoute($role));
         $response->assertRedirect(route('denies'));
     }
