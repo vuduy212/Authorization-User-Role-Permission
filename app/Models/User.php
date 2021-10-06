@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+
 
     /**
      * The attributes that are mass assignable.
@@ -41,4 +42,68 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole($roles)
+    {
+        foreach ($roles as $role) {
+            if ($this->roles->contains('name', $role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasPermission($perrmissions)
+    {
+        foreach ($this->roles as $role) {
+            if ($role->hasPermission($perrmissions)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function attachRoles(int $roleId)
+    {
+        return $this->roles()->attach($roleId);
+    }
+
+    public function detachRoles()
+    {
+        return $this->roles()->detach();
+    }
+
+    public function syncRoles(int $roleId)
+    {
+        return $this->roles()->sync($roleId);
+    }
+
+    public function isAdmin()
+    {
+        $adminRole = Role::where('name', 'admin_test')->first();
+        return $this->hasRole($adminRole);
+    }
+
+    public function isClient()
+    {
+        $clientRole = Role::where('name', 'client_test')->first();
+        return $this->hasRole($clientRole);
+    }
+
+    public function search(array $data)
+    {
+        $userName = array_key_exists('key', $data) ? $data['key'] : null;
+
+        return $this->searchUsername($userName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
+    }
+
+    public function scopeSearchUsername($query, $userName)
+    {
+        return $query->where('name', 'like', '%' . $userName . '%');
+    }
 }
