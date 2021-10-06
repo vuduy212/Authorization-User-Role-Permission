@@ -13,7 +13,6 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
                     {{ __('Ban khong co quyen truy cap!!') }}
                 </div>
             </div>

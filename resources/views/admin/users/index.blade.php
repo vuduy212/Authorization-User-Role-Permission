@@ -7,9 +7,9 @@
             <div class="card">
                 <div class="card-header">
                     Users
-                    @can('user.create')
+                    @create
                     <a href="{{ route('users.create') }}" class="btn btn-primary">Create New User</a>
-                    @endcan
+                    @endif
                 </div>
                 <form action="{{ route('users.index') }}" method="GET" class="md-3 d-flex">
                     <input type="text" class="form-control" name="key" value="{{request('key')}}">
@@ -35,19 +35,19 @@
                                 <td>{{$user->email}}</td>
                                 <td>{{ implode(', ', $user->roles()->get()->pluck('name')->toArray()) }}</td>
                                 <td>
-                                    @can('user.view')
+                                    @view
                                     <a href="{{ route('users.show', $user->id) }}"><button type="button" class="btn btn-success">DETAIL</button></a>
-                                    @endcan
-                                    @can('user.update')
+                                    @endif
+                                    @update
                                     <a href="{{ route('users.edit', $user->id) }}"><button type="button" class="btn btn-warning">EDIT</button>
-                                    @endcan
-                                    @can('user.delete')
+                                    @endif
+                                    @delete
                                     <form action="{{ route('users.destroy', $user) }}" method="POST" class="float-left">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">DELETE</button>
                                     </form>
-                                    @endcan
+                                    @endif
                                 </td>
                               </tr>
                             @endforeach

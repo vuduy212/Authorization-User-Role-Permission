@@ -16,7 +16,6 @@ class CreateUserTest extends TestCase
     public function not_admin_cant_see_create_user_button()
     {
         $this->loginWithClientRole();
-
         $response = $this->get($this->getUserIndexRoute());
         $response->assertDontSeeText('Create New User');
     }

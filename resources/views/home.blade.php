@@ -14,7 +14,11 @@
                         </div>
                     @endif
 
-                    {{ __('Welcome to Index !!') }}
+                    @super
+                        {{ __('Welcome Super Admin to Index !!') }}
+                    @else
+                        {{ __('Welcome Normal User to Index !!') }}
+                    @endif
                 </div>
             </div>
         </div>

@@ -2,11 +2,8 @@
 
 namespace Tests\Feature\Role;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Response;
 
 class ReadRoleTest extends TestCase
@@ -16,7 +13,6 @@ class ReadRoleTest extends TestCase
     public function not_admin_cant_see_detail_role_button()
     {
         $this->loginWithClientRole();
-
         $response = $this->get($this->getRoleIndexRoute());
         $response->assertDontSeeText('DETAIL');
     }
@@ -25,7 +21,6 @@ class ReadRoleTest extends TestCase
     public function admin_can_see_detail_role_button()
     {
         $this->loginWithAdminRole();
-
         $response = $this->get($this->getRoleIndexRoute());
         $response->assertSeeText('DETAIL');
     }

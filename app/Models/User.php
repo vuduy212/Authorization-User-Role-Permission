@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -84,6 +81,18 @@ class User extends Authenticatable
     public function syncRoles(int $roleId)
     {
         return $this->roles()->sync($roleId);
+    }
+
+    public function isAdmin()
+    {
+        $adminRole = Role::where('name', 'admin_test')->first();
+        return $this->hasRole($adminRole);
+    }
+
+    public function isClient()
+    {
+        $clientRole = Role::where('name', 'client_test')->first();
+        return $this->hasRole($clientRole);
     }
 
     public function search(array $data)

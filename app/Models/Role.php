@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use Illuminate\Http\Request;
 
 class Role extends Model
 {
@@ -27,25 +25,12 @@ class Role extends Model
 
     public function hasPermission($permissions)
     {
-        foreach($permissions as $permission)
-        {
-            if($this->permissions->contains('action', $permission)){
+        foreach ($permissions as $permission) {
+            if ($this->permissions->contains('action', $permission)) {
                 return true;
             }
         }
         return false;
-    }
-
-    public function search(array $data)
-    {
-        $roleName = array_key_exists('key', $data) ? $data['key'] : null;
-
-        return $this->searchRoleName($roleName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
-    }
-
-    public function scopeSearchRoleName($query, $roleName)
-    {
-        return $query->where('name','like','%'.$roleName.'%');
     }
 
     public function attachPermissions($permission)
@@ -61,5 +46,17 @@ class Role extends Model
     public function detachPermissions()
     {
         return $this->permissions()->detach();
+    }
+
+    public function search(array $data)
+    {
+        $roleName = array_key_exists('key', $data) ? $data['key'] : null;
+
+        return $this->searchRoleName($roleName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
+    }
+
+    public function scopeSearchRoleName($query, $roleName)
+    {
+        return $query->where('name', 'like', '%' . $roleName . '%');
     }
 }

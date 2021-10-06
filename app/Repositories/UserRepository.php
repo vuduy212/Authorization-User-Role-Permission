@@ -3,7 +3,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +30,6 @@ class UserRepository extends BaseRepository
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-
         if (empty($data['roles'])) {
             $roles = [
                 'client' => '70'
@@ -39,9 +37,7 @@ class UserRepository extends BaseRepository
         } else {
             $roles = $this->getRolesID($data['roles']);
         }
-
         $user->roles()->attach($roles);
-
         return $user;
     }
 
@@ -50,9 +46,7 @@ class UserRepository extends BaseRepository
         $user->roles()->sync($request->roles);
         $user->name = $request->name;
         $user->email = $request->email;
-
         $user->save();
-
         return $user;
     }
 
@@ -65,7 +59,6 @@ class UserRepository extends BaseRepository
     public function search(array $data)
     {
         $userName = array_key_exists('key', $data) ? $data['key'] : null;
-
         return $this->model->searchUsername($userName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
     }
 
