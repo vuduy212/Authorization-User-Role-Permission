@@ -28,11 +28,6 @@ class RoleRepository extends BaseRepository
         return $this->model->searchRoleName($roleName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
     }
 
-    public function scopeSearchRoleName($query, $roleName)
-    {
-        return $query->where('name', 'like', '%' . $roleName . '%');
-    }
-
     public function createRole(array $data)
     {
         $role = $this->model->create([
