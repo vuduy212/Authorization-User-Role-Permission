@@ -20,10 +20,10 @@ class Permission extends Model
     {
         $permissionName = array_key_exists('key', $data) ? $data['key'] : null;
 
-        return $this->searchRoleName($permissionName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
+        return $this->searchPermissionName($permissionName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
     }
 
-    public function scopeSearchRoleName($query, $permissionName)
+    public function scopeSearchPermissionName($query, $permissionName)
     {
         return $query->where('name', 'like', '%' . $permissionName . '%');
     }

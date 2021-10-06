@@ -61,9 +61,4 @@ class UserRepository extends BaseRepository
         $userName = array_key_exists('key', $data) ? $data['key'] : null;
         return $this->model->searchUsername($userName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
     }
-
-    public function scopeSearchUsername($query, $userName)
-    {
-        return $query->where('name', 'like', '%' . $userName . '%');
-    }
 }
