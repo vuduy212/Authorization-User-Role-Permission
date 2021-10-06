@@ -15,7 +15,6 @@
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
-                            {{-- <th scope="col">Password</th> --}}
                             <th scope="col">Roles</th>
                           </tr>
                         </thead>
@@ -24,7 +23,6 @@
                                 <th scope="row">{{$user->id}}</th>
                                 <td>{{$user->name}}</td>
                                 <td>{{$user->email}}</td>
-                                {{-- <td>{{$user->password}}</td> --}}
                                 <td>{{ implode(', ', $user->roles()->get()->pluck('name')->toArray()) }}</td>
                               </tr>
                         </tbody>

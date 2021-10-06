@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Permission;
 use App\Services\PermissionsService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class PermissionController extends Controller
 {

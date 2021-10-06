@@ -19,7 +19,6 @@ class PermissionsRepository extends BaseRepository
     public function search(array $data)
     {
         $permissionName = array_key_exists('key', $data) ? $data['key'] : null;
-
         return $this->model->searchRoleName($permissionName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
     }
 

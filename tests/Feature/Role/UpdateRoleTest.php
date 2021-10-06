@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Role;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Role;
 use Illuminate\Http\Response;
@@ -16,7 +14,6 @@ class UpdateRoleTest extends TestCase
     public function not_admin_cant_see_edit_role_button()
     {
         $this->loginWithClientRole();
-
         $response = $this->get($this->getRoleIndexRoute());
         $response->assertStatus(200);
         $response->assertDontSeeText('EDIT');
@@ -26,7 +23,6 @@ class UpdateRoleTest extends TestCase
     public function admin_can_see_edit_role_button()
     {
         $this->loginWithAdminRole();
-
         $response = $this->get($this->getRoleIndexRoute());
         $response->assertStatus(200);
         $response->assertSeeText('EDIT');
@@ -36,7 +32,6 @@ class UpdateRoleTest extends TestCase
     public function admin_can_see_form_edit_role()
     {
         $this->loginWithAdminRole();
-
         $role = Role::factory()->create();
         $response = $this->get($this->getRoleEditRoute($role));
         $response->assertViewIs('admin.roles.edit', $role);
@@ -48,7 +43,6 @@ class UpdateRoleTest extends TestCase
     public function not_admin_cant_see_form_edit_role()
     {
         $this->loginWithClientRole();
-
         $role = Role::factory()->create();
         $response = $this->get($this->getRoleEditRoute($role));
         $response->assertRedirect(route('denies'));

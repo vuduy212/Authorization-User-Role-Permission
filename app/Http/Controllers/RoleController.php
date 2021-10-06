@@ -8,7 +8,6 @@ use App\Models\Role;
 use App\Services\PermissionsService;
 use App\Services\RoleService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {

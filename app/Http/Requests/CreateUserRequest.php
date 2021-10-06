@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\StrLengthRule;
+use App\Rules\SuperRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateUserRequest extends FormRequest
@@ -24,7 +26,10 @@ class CreateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
+            'name' => [
+                'required',
+                new StrLengthRule()
+            ],
             'email' => 'required|unique:users,email',
             'password' => 'required|confirmed'
         ];

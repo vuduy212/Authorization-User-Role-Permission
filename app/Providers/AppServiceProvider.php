@@ -27,52 +27,61 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
-        // Blade::if('u.view', function ($value) {
-        //     return config('user.view') === $value;
-        // });
+        $this->customIfStatementSuperAdmin();
+        $this->customIfStatementViewDetail();
+        $this->customIfStatementUpdate();
+        $this->customIfStatementCreate();
+        $this->customIfStatementDelete();
+    }
 
-        // Blade::if('u.create', function ($value) {
-        //     return config('user.create') === $value;
-        // });
+    public function customIfStatementSuperAdmin()
+    {
+        Blade::if('super', function () {
+            return auth()->user()->hasRole(['Super Admin']);
+        });
+    }
 
-        // Blade::if('u.update', function ($value) {
-        //     return config('user.update') === $value;
-        // });
+    public function customIfStatementViewDetail()
+    {
+        Blade::if('view', function () {
+            return auth()->user()->hasPermission([
+                'user.view',
+                'role.view',
+                'permission.view',
+            ]);
+        });
+    }
 
-        // Blade::if('u.delete', function ($value) {
-        //     return config('user.delete') === $value;
-        // });
+    public function customIfStatementUpdate()
+    {
+        Blade::if('update', function () {
+            return auth()->user()->hasPermission([
+                'user.update',
+                'role.update',
+                'permission.update',
+            ]);
+        });
+    }
 
-        // Blade::if('r.view', function ($value) {
-        //     return config('role.view') === $value;
-        // });
+    public function customIfStatementCreate()
+    {
+        Blade::if('create', function () {
+            return auth()->user()->hasPermission([
+                'user.create',
+                'role.create',
+                'permission.create',
+            ]);
+        });
+    }
 
-        // Blade::if('r.create', function ($value) {
-        //     return config('role.create') === $value;
-        // });
-
-        // Blade::if('r.update', function ($value) {
-        //     return config('role.update') === $value;
-        // });
-
-        // Blade::if('r.delete', function ($value) {
-        //     return config('role.delete') === $value;
-        // });
-
-        // Blade::if('p.view', function ($value) {
-        //     return config('permission.view') === $value;
-        // });
-
-        // Blade::if('p.create', function ($value) {
-        //     return config('permission.create') === $value;
-        // });
-
-        // Blade::if('p.update', function ($value) {
-        //     return config('permission.update') === $value;
-        // });
-
-        // Blade::if('p.delete', function ($value) {
-        //     return config('permission.delete') === $value;
-        // });
+    public function customIfStatementDelete()
+    {
+        Blade::if('delete', function () {
+            return auth()->user()->hasPermission([
+                'user.delete',
+                'role.delete',
+                'permission.delete',
+            ]);
+        });
     }
 }

@@ -13,7 +13,7 @@ class RoleRepository extends BaseRepository
         return Role::class;
     }
 
-    public function getPermissionsID($permissions) //return 1 array cac permission
+    public function getPermissionsID($permissions)
     {
         $getPermissions = [];
         foreach ($permissions as $permission) {
@@ -25,7 +25,6 @@ class RoleRepository extends BaseRepository
     public function search(array $data)
     {
         $roleName = array_key_exists('key', $data) ? $data['key'] : null;
-
         return $this->model->searchRoleName($roleName)->latest('id')->paginate(array_key_exists('number', $data) ? $data['number'] : 5);
     }
 
@@ -39,7 +38,6 @@ class RoleRepository extends BaseRepository
         $role = $this->model->create([
             'name' => $data['name'],
         ]);
-
         if (empty($data['permissions'])) {
             $permissions = [
                 'List user' => '5'
@@ -48,7 +46,6 @@ class RoleRepository extends BaseRepository
             $permissions = $this->getPermissionsID($data['permissions']);
         }
         $role->attachPermissions($permissions);
-
         return $role;
     }
 
@@ -56,9 +53,7 @@ class RoleRepository extends BaseRepository
     {
         $role->permissions()->sync($request->permissions);
         $role->name = $request->name;
-
         $role->save();
-
         return $role;
     }
 
