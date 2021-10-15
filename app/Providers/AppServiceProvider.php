@@ -27,11 +27,19 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
-        $this->customIfStatementSuperAdmin();
-        $this->customIfStatementViewDetail();
-        $this->customIfStatementUpdate();
-        $this->customIfStatementCreate();
-        $this->customIfStatementDelete();
+       $this->customIfStatementSuperAdmin();
+       $this->customViewUser();
+       $this->customViewRole();
+       $this->customViewPermission();
+       $this->customCreateUser();
+       $this->customCreateRole();
+       $this->customCreatePermission();
+       $this->customUpdateUser();
+       $this->customUpdateRole();
+       $this->customUpdatePermission();
+       $this->customDeleteUser();
+       $this->customDeleteRole();
+       $this->customDeletePermission();
     }
 
     public function customIfStatementSuperAdmin()
@@ -41,45 +49,119 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    public function customIfStatementViewDetail()
+    public function hasPermission()
     {
-        Blade::if('view', function () {
+        Blade::if('hasPermission', function ($permission)
+        {
+            return auth()->user()->hasPermission([
+                $permission,
+            ]);
+        });
+    }
+
+    public function customViewUser()
+    {
+        Blade::if('viewuser', function () {
             return auth()->user()->hasPermission([
                 'user.view',
+            ]);
+        });
+    }
+
+    public function customViewRole()
+    {
+        Blade::if('viewrole', function () {
+            return auth()->user()->hasPermission([
                 'role.view',
+            ]);
+        });
+    }
+
+    public function customViewPermission()
+    {
+        Blade::if('viewpermission', function () {
+            return auth()->user()->hasPermission([
                 'permission.view',
             ]);
         });
     }
 
-    public function customIfStatementUpdate()
+    public function customUpdateUser()
     {
-        Blade::if('update', function () {
+        Blade::if('updateuser', function () {
             return auth()->user()->hasPermission([
                 'user.update',
+            ]);
+        });
+    }
+
+    public function customUpdateRole()
+    {
+        Blade::if('updaterole', function () {
+            return auth()->user()->hasPermission([
                 'role.update',
+            ]);
+        });
+    }
+
+    public function customUpdatePermission()
+    {
+        Blade::if('updatepermission', function () {
+            return auth()->user()->hasPermission([
                 'permission.update',
             ]);
         });
     }
 
-    public function customIfStatementCreate()
+    public function customCreateUser()
     {
-        Blade::if('create', function () {
+        Blade::if('createuser', function () {
             return auth()->user()->hasPermission([
                 'user.create',
+            ]);
+        });
+    }
+
+    public function customCreateRole()
+    {
+        Blade::if('createrole', function () {
+            return auth()->user()->hasPermission([
                 'role.create',
+            ]);
+        });
+    }
+
+    public function customCreatePermission()
+    {
+        Blade::if('createpermission', function () {
+            return auth()->user()->hasPermission([
                 'permission.create',
             ]);
         });
     }
 
-    public function customIfStatementDelete()
+    public function customDeleteUser()
     {
-        Blade::if('delete', function () {
+        Blade::if('deleteuser', function () {
             return auth()->user()->hasPermission([
                 'user.delete',
+            ]);
+        });
+    }
+
+    public function customDeleteRole()
+    {
+        Blade::if('deleterole', function () {
+            return auth()->user()->hasPermission([
                 'role.delete',
+            ]);
+        });
+    }
+
+    public function customDeletePermission()
+    {
+        Blade::if('deletepermission', function () {
+            return auth()->user()->hasPermission([
                 'permission.delete',
             ]);
         });

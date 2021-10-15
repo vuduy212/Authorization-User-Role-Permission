@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     Users
-                    @create
+                    @createuser
                     <a href="{{ route('users.create') }}" class="btn btn-primary">Create New User</a>
                     @endif
                 </div>
@@ -35,13 +35,13 @@
                                 <td>{{$user->email}}</td>
                                 <td>{{ implode(', ', $user->roles()->get()->pluck('name')->toArray()) }}</td>
                                 <td>
-                                    @view
+                                    @viewuser
                                     <a href="{{ route('users.show', $user->id) }}"><button type="button" class="btn btn-success">DETAIL</button></a>
                                     @endif
-                                    @update
+                                    @updateuser
                                     <a href="{{ route('users.edit', $user->id) }}"><button type="button" class="btn btn-warning">EDIT</button>
                                     @endif
-                                    @delete
+                                    @deleteuser
                                     <form action="{{ route('users.destroy', $user) }}" method="POST" class="float-left">
                                         @csrf
                                         @method('DELETE')

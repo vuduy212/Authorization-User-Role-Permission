@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     Roles
-                    @create
+                    @createrole
                     <a href="{{ route('roles.create') }}" class="btn btn-primary">Create New Role</a>
                     @endif
                 </div>
@@ -33,13 +33,13 @@
                                 <td>{{$role->name}}</td>
                                 <td>{{ implode(', ', $role->permissions()->get()->pluck('name')->toArray()) }}</td>
                                 <td>
-                                    @view
+                                    @viewrole
                                     <a href="{{ route('roles.show', $role->id) }}"><button type="button" class="btn btn-success">DETAIL</button></a>
                                     @endif
-                                    @update
+                                    @updaterole
                                     <a href="{{ route('roles.edit', $role->id) }}"><button type="button" class="btn btn-warning">EDIT</button>
                                     @endif
-                                    @delete
+                                    @deleterole
                                     <form action="{{ route('roles.destroy', $role) }}" method="POST" class="float-left">
                                         @csrf
                                         @method('DELETE')

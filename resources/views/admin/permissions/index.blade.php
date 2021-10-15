@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">
                     Permissions
-                    @create
+                    @createpermission
                     <a href="{{ route('permissions.create') }}" class="btn btn-primary">Create New Permission</a>
                     @endif
                 </div>
@@ -33,13 +33,13 @@
                                 <td>{{$permission->name}}</td>
                                 <td>{{$permission->action}}</td>
                                 <td>
-                                    @view
+                                    @viewpermission
                                     <a href="{{ route('permissions.show', $permission->id) }}"><button type="button" class="btn btn-success">DETAIL</button></a>
                                     @endif
-                                    @update
+                                    @updatepermission
                                     <a href="{{ route('permissions.edit', $permission->id) }}"><button type="button" class="btn btn-warning">EDIT</button>
                                     @endif
-                                    @delete
+                                    @deletepermission
                                     <form action="{{ route('permissions.destroy', $permission) }}" method="POST" class="float-left">
                                         @csrf
                                         @method('DELETE')
